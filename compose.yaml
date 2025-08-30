@@ -1,0 +1,18 @@
+services:
+  puppeteer:
+    container_name: puppeteer-srv
+    image: tapomix/puppeteer-srv
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      target: ${BUILD_TARGET:-dev}
+    env_file:
+      - .env
+    expose:
+      - ${SERVER_PORT:-3000}
+    networks:
+      - puppeteer-net
+
+networks:
+  puppeteer-net:
+    name: puppeteer-net

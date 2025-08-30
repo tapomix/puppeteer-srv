@@ -1,0 +1,5 @@
+services:
+  puppeteer:
+    volumes:
+      - ./src:/app
+    tty: true
