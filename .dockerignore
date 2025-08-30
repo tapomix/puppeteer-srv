@@ -1,0 +1,11 @@
+**/*.md
+**/*.dist
+
+.castor/
+
+.editorconfig
+
+.git/
+.gitignore
+
+src/node_modules/
