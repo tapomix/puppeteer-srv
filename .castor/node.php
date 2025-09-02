@@ -2,17 +2,16 @@
 
 namespace node;
 
-use Castor\Attribute\AsArgument;
+use Castor\Attribute\AsRawTokens;
 use Castor\Attribute\AsTask;
 
 use function Castor\context;
 
-/** @param string $cmd */
-#[AsTask(description: 'Excute npm command', aliases: ['npm'])]
+/** @param string[] $args */
+#[AsTask(description: 'Execute an npm command', aliases: ['npm'])]
 function npm(
-    #[AsArgument(description: 'Command to execute')]
-    ?string $cmd = null,
-): void
-{
-    \docker\run(SERVICE_NODE, array_merge(['npm'], [(string) $cmd]), context()->withAllowFailure());
+    #[AsRawTokens]
+    array $args = [],
+): void {
+    \docker\run(SERVICE_NODE, array_merge(['npm'], $args), context('interactive'));
 }
