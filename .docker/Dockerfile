@@ -9,7 +9,8 @@ RUN apk add --no-cache \
     ttf-freefont \
     ttf-dejavu \
     fontconfig \
-    bash
+    bash \
+    tini
 
 WORKDIR /app
 
@@ -34,5 +35,8 @@ COPY --chown=node:node --link src/package*.json ./
 RUN npm install --production
 
 COPY --chown=node:node --link src .
+
+# use tini as PID 1 with this entrypoint to avoid zombie process
+ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["npm", "run", "start"]
