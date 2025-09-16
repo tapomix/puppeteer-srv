@@ -16,13 +16,13 @@ const authenticateToken = (request, response, next) => {
     const token = request.headers['authorization'];
 
     if (!token) {
-        console.log('[JS] [ERR] Missing token');
+        console.log('[AUTH] Missing token.');
 
         return response.status(401).send({ error: 'Access denied, missing token !' });
     }
 
     if (token !== `Bearer ${APP_TOKEN}`) {
-        console.log('[JS] [ERR] Invalid token');
+        console.log('[AUTH] Invalid token.');
 
         return response.status(403).send({ error: 'Access denied, invalid token !' });
     }
@@ -62,7 +62,7 @@ const gracefulShutdown = async (reason = 'manual') => {
     if (browserInstance) {
         try {
             await browserInstance.close();
-            console.log('[JS] Browser closed cleanly');
+            console.log('Browser closed cleanly.');
         } catch (err) {
             console.error('[ERR] Failed to close browser: ', err);
         } finally {
@@ -75,7 +75,7 @@ const processAction = async (action, request, response) => {
     const { html, options, viewport } = request.body;
 
     console.log('[JS] Processing new request # ' + action);
-    // console.log('[JS] Options: ', JSON.stringify(options, null, 2));
+    // console.log('Options: ', JSON.stringify(options, null, 2));
 
     let page;
     let browser;
@@ -85,12 +85,9 @@ const processAction = async (action, request, response) => {
         page = await browser.newPage();
 
         await page.setViewport(viewport || { width: 1920, height: 0 });
-        await page.setContent(
-            // split pages array with css page break
-            // pages.join('<div style="page-break-after: always;"></div>'),
-            html,
-            { timeout: 30000, waitUntil: 'networkidle0' }
-        );
+        // split pages array with css page break
+        // html = pages.join('<div style="page-break-after: always;"></div>'),
+        await page.setContent(html, { timeout: 30000, waitUntil: 'networkidle0' });
 
         let buffer;
         let contentType;
@@ -110,6 +107,7 @@ const processAction = async (action, request, response) => {
         response.setHeader('Content-Length', buffer.length);
         response.send(buffer);
     } catch (err) {
+        console.error('[ERR] Failed to process action: ', err);
         response.status(500).send({ error: err.message });
     } finally {
         if (page) {
@@ -139,13 +137,13 @@ app.post('/screenshot', authenticateToken, async (request, response) => {
 });
 
 app.listen(APP_PORT, () => {
-    console.log(`[JS] [SRV] Puppeteer service running on ${APP_PORT} # ${APP_ENV}`);
-    console.log('[JS] [SRV] Browser kept ? ' + (KEEP_BROWSER_OPEN ? 'V' : 'X'));
+    console.log(`[SRV] Puppeteer service running on ${APP_PORT} # ${APP_ENV}`);
+    console.log('[SRV] Browser kept ? ' + (KEEP_BROWSER_OPEN ? 'V' : 'X'));
 
     if (KEEP_BROWSER_OPEN) {
         getBrowserInstance()
-            .then(() => console.log('[JS] Browser is ready'))
-            .catch(err => console.log('[JS] [SRV] Failed to prelaunch browser: ' + err))
+            .then(() => console.log('Browser is ready.'))
+            .catch(err => console.log('[ERR] Failed to prelaunch browser: ' + err))
         ;
     }
 });
