@@ -33,15 +33,11 @@ const authenticateToken = (request, response, next) => {
 let browserInstance;
 // create browser instance on demand
 const getBrowserInstance = async () => {
-    if (KEEP_BROWSER_OPEN) {
-        if (!browserInstance) {
-            browserInstance = await createBrowser();
-        }
-
-        return browserInstance;
-    } else {
-        return await createBrowser();
+    if (!browserInstance || !KEEP_BROWSER_OPEN) {
+        browserInstance = await createBrowser();
     }
+
+    return browserInstance;
 };
 
 const createBrowser = async () => {
@@ -60,15 +56,33 @@ const createBrowser = async () => {
     });
 };
 
+const gracefulShutdown = async (reason = 'manual') => {
+    console.log(`[JS] Graceful shutdown triggered (${reason})...`);
+
+    if (browserInstance) {
+        try {
+            await browserInstance.close();
+            console.log('[JS] Browser closed cleanly');
+        } catch (err) {
+            console.error('[ERR] Failed to close browser: ', err);
+        } finally {
+            browserInstance = null;
+        }
+    }
+};
+
 const processAction = async (action, request, response) => {
     const { html, options, viewport } = request.body;
 
     console.log('[JS] Processing new request # ' + action);
     // console.log('[JS] Options: ', JSON.stringify(options, null, 2));
 
+    let page;
+    let browser;
+
     try {
-        const browser = await getBrowserInstance();
-        const page = await browser.newPage();
+        browser = await getBrowserInstance();
+        page = await browser.newPage();
 
         await page.setViewport(viewport || { width: 1920, height: 0 });
         await page.setContent(
@@ -84,7 +98,7 @@ const processAction = async (action, request, response) => {
             contentType = 'application/pdf';
             buffer = await page.pdf(options || {});
         } else if ('screenshot' === action) {
-            contentType = 'image/png';
+            contentType = 'image/png'; // image/jpeg
             buffer = await page.screenshot(options || {});
         }
 
@@ -92,17 +106,27 @@ const processAction = async (action, request, response) => {
             throw new Error('Generated buffer is empty.');
         }
 
-        await page.close();
-
-        if (!KEEP_BROWSER_OPEN) {
-            await browser.close();
-        }
-
         response.setHeader('Content-Type', contentType);
         response.setHeader('Content-Length', buffer.length);
         response.send(buffer);
     } catch (err) {
         response.status(500).send({ error: err.message });
+    } finally {
+        if (page) {
+            try {
+                await page.close();
+            } catch (err) {
+                console.error('[ERR] Failed to close page: ', err);
+            }
+        }
+
+        if (!KEEP_BROWSER_OPEN && browser) {
+            try {
+                await gracefulShutdown('processAction');
+            } catch (err) {
+                console.error('[ERR] Failed to close browser: ', err);
+            }
+        }
     }
 };
 
@@ -127,10 +151,10 @@ app.listen(APP_PORT, () => {
 });
 
 // close browser on server shutdown
-process.on('SIGINT', async () => {
-    if (browserInstance && KEEP_BROWSER_OPEN) {
-        await browserInstance.close();
-    }
-
-    process.exit();
+['SIGINT', 'SIGTERM'].forEach(signal => {
+    process.on(signal, async () => {
+        await gracefulShutdown(signal);
+        // just set exitCode instead of exit(0) to give time to finish closing process
+        process.exitCode = 0;
+    });
 });
