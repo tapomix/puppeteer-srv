@@ -1,6 +1,6 @@
 {
     "name": "puppeteer-srv",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Generate pdf or image based on HTML with Puppeteer",
     "license": "MIT",
     "main": "server.js",
