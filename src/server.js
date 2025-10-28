@@ -4,27 +4,10 @@ import puppeteer from "puppeteer-core"; // <- use core version as we install man
 
 import { APP_ENV, APP_PORT, KEEP_BROWSER_OPEN } from "./config.js";
 
+import { authenticateToken } from "./middlewares/auth.js";
+
 const app = express();
 app.use(express.json({ limit: '10mb' }));
-
-// use this function as middleware on required routes
-const authenticateToken = (request, response, next) => {
-    const token = request.headers['authorization'];
-
-    if (!token) {
-        console.log('[AUTH] Missing token.');
-
-        return response.status(401).send({ error: 'Access denied, missing token !' });
-    }
-
-    if (token !== `Bearer ${APP_TOKEN}`) {
-        console.log('[AUTH] Invalid token.');
-
-        return response.status(403).send({ error: 'Access denied, invalid token !' });
-    }
-
-    next(); // execute next middleware if token is ok
-};
 
 let browserInstance;
 // create browser instance on demand
@@ -124,11 +107,14 @@ const processAction = async (action, request, response) => {
     }
 };
 
-app.post('/pdf', authenticateToken, async (request, response) => {
+// apply global middlewares
+app.use(authenticateToken);
+
+app.post('/pdf', async (request, response) => {
     await processAction('pdf', request, response);
 });
 
-app.post('/screenshot', authenticateToken, async (request, response) => {
+app.post('/screenshot', async (request, response) => {
     await processAction('screenshot', request, response);
 });
 
