@@ -10,7 +10,9 @@ RUN apk add --no-cache \
     ttf-dejavu \
     fontconfig \
     bash \
-    tini
+    tini \
+    # add curl to run healthcheck
+    curl
 
 WORKDIR /app
 
