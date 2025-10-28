@@ -1,6 +1,6 @@
-# Description
+# Tapomix \ PuppeteerSrv
 
-[Puppeteer](https://pptr.dev/) JS server to generate pdf or image from html code.
+[Puppeteer](https://pptr.dev/) JS server to generate **pdf** or **screenshot** from html code.
 
 The server will be exposed on : `http://puppeteer:3000` (port is configurable)
 
@@ -39,7 +39,7 @@ castor token
 Start the container with :
 
 ```bash
-castor start # ( or the first time : castor build )
+castor start # ( or the first time : castor build && castor start )
 ```
 
 Add in the container of your *client* project the network `puppeteer-net`.
@@ -59,4 +59,4 @@ networks:
 
 Then you can call the server with the address : `http://puppeteer:3000`
 
-> See [https://github.com/tapomix/chrome-wrapper](https://github.com/tapomix/chrome-wrapper), it's the PHP *client* to dialog with this server.
+> See [https://github.com/tapomix/chrome-wrapper](https://github.com/tapomix/chrome-wrapper), it's the **PHP client** to dialog with this server.
