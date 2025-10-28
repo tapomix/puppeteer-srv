@@ -29,7 +29,7 @@ app.get('/health', async (_request, response) => {
     } catch (error) {
         response.status(503).json({
             status: 'error',
-            message: error.message
+            message: APP_ENV === 'dev' ? error.message : 'Service temporarily unavailable',
         });
     }
 });
