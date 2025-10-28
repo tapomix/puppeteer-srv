@@ -3,3 +3,8 @@ services:
     # only expose the port for documentation
     expose:
       - ${SERVER_PORT:-3000}
+    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 2
