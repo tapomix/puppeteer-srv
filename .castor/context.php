@@ -3,17 +3,17 @@
 use Castor\Attribute\AsContext;
 use Castor\Context;
 
-use function Castor\context;
 use function Castor\load_dot_env;
 
 #[AsContext(default: true)]
 function default_context(): Context
 {
-    return (new Context(load_dot_env(__DIR__ . '/../' . ENV_FILE)))->withAllowFailure();
-}
+    $context = (new Context(load_dot_env(__DIR__ . '/../' . DOCKER_ENV)))->withAllowFailure();
 
-#[AsContext(name: 'interactive')]
-function interactive_context(): Context
-{
-    return context()->toInteractive()->withTty();
+    // only enable TTY in interactive mode (manual console usage)
+    if (stream_isatty(STDIN) && stream_isatty(STDOUT)) {
+        $context = $context->withTty();
+    }
+
+    return $context;
 }

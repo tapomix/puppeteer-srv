@@ -3,7 +3,7 @@
 namespace app;
 
 define('CODE_PATH', 'src/');
-define('ENV_FILE', '.env');
+define('DOCKER_ENV', '.env');
 
 define('SERVICE_NPM', 'puppeteer');
 
