@@ -2,14 +2,10 @@
 import express from "express";
 import puppeteer from "puppeteer-core"; // <- use core version as we install manually chromium in Dockerfile
 
+import { APP_ENV, APP_PORT, KEEP_BROWSER_OPEN } from "./config.js";
+
 const app = express();
 app.use(express.json({ limit: '10mb' }));
-
-const APP_ENV = process.env.APP_ENV || 'dev';
-const APP_PORT = process.env.SERVER_PORT || 3000;
-const APP_TOKEN = process.env.APP_TOKEN || 'tapomix_puppeteer-srv_dev-token';
-const CHROME_EXECUTABLE = process.env.CHROME_EXECUTABLE || '/usr/bin/chromium';
-const KEEP_BROWSER_OPEN = process.env.KEEP_BROWSER_OPEN === 'true'; // compare to string ! (but now we got a boolean)
 
 // use this function as middleware on required routes
 const authenticateToken = (request, response, next) => {
