@@ -1,6 +1,8 @@
 services:
   puppeteer:
     # only expose the port for documentation
+    build:
+      target: prod
     expose:
       - ${SERVER_PORT}
     restart: unless-stopped

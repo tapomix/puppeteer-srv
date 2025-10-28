@@ -1,5 +1,7 @@
 services:
   puppeteer:
+    build:
+      target: dev
     volumes:
       - ./src:/app
     # expose the port on host to test with gui tools
