@@ -54,28 +54,36 @@ function shell(string $service): void
 /** @return string[] */
 function buildBaseDockerComposeCmd(): array
 {
-    $envCompose = 'compose.'.$_SERVER['APP_ENV'].'.yaml';
-    $dockerEnv = ENV_FILE;
+    $envCompose = 'compose.' . $_SERVER['APP_ENV'] . '.yaml';
 
     if (!fs()->exists($envCompose)) {
         throw new ProblemException('Specific Docker Compose not found');
     }
 
-    if (!fs()->exists($dockerEnv)) {
+    if (!fs()->exists(DOCKER_ENV)) {
         throw new ProblemException('Docker Compose config not found');
+    }
+
+    $composes = [
+        'compose.yaml', // base file
+        $envCompose, // env specific file
+    ];
+
+    if (fs()->exists('compose.override.yaml')) {
+        $composes[] = 'compose.override.yaml'; // custom file
     }
 
     $cmd = [
         'docker',
         'compose',
-
-        '-f',
-        'compose.yaml',
-        '-f',
-        $envCompose,
-
-        '--env-file='.$dockerEnv,
     ];
+
+    foreach ($composes as $compose) {
+        $cmd[] = '-f';
+        $cmd[] = $compose;
+    }
+
+    $cmd[] = '--env-file=' . DOCKER_ENV;
 
     return $cmd;
 }
