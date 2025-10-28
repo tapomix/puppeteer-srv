@@ -49,6 +49,12 @@ app.post('/screenshot', async (request, response) => {
     await processAction('screenshot', request, response);
 });
 
+// handle unknown routes
+app.use((_request, response) => {
+    response.status(404).json({ error: 'Route not found' });
+});
+
+// finally start server after middlewares registration + routes definition
 app.listen(APP_PORT, () => {
     console.log(`[SRV] Puppeteer service running on ${APP_PORT} # ${APP_ENV}`);
     console.log('[SRV] Browser kept ? ' + (KEEP_BROWSER_OPEN ? 'V' : 'X'));
