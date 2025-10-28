@@ -8,7 +8,6 @@ use Castor\Context;
 use Castor\Exception\ProblemException;
 use Symfony\Component\Process\Process;
 
-use function Castor\capture;
 use function Castor\context;
 use function Castor\fs;
 use function Castor\io;
@@ -27,7 +26,7 @@ function start(): void
 {
     io()->title('Starting server');
 
-    capture(\array_merge(buildBaseDockerComposeCmd(), ['up', '--detach', '--wait']));
+    castor_run(\array_merge(buildBaseDockerComposeCmd(), ['up', '--detach', '--wait']));
 }
 
 #[AsTask(description: 'Stopping server (aka compose down)', aliases: ['stop', 'down'])]
@@ -35,7 +34,7 @@ function stop(): void
 {
     io()->title('Stopping server');
 
-    capture(\array_merge(buildBaseDockerComposeCmd(), ['down', '--remove-orphans']));
+    castor_run(\array_merge(buildBaseDockerComposeCmd(), ['down', '--remove-orphans']));
 }
 
 #[AsTask(description: 'Show server logs', aliases: ['logs'])]
