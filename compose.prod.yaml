@@ -1,3 +1,5 @@
 services:
   puppeteer:
-    restart: unless-stopped
+    # only expose the port for documentation
+    expose:
+      - ${SERVER_PORT:-3000}

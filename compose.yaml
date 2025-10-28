@@ -8,8 +8,6 @@ services:
       target: ${BUILD_TARGET:-dev}
     env_file:
       - .env
-    expose:
-      - ${SERVER_PORT:-3000}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://puppeteer:${SERVER_PORT:-3000}/health"]
       interval: 5m
