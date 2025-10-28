@@ -4,6 +4,7 @@ import express from "express";
 import { APP_ENV, APP_PORT, KEEP_BROWSER_OPEN } from "./config.js";
 
 import { authenticateToken } from "./middlewares/auth.js";
+import { globalLimiter, apiLimiter } from "./middlewares/limiter.js";
 
 import { getBrowserInstance, gracefulShutdown, processAction } from "./services/browser.js";
 
@@ -11,7 +12,9 @@ const app = express();
 app.use(express.json({ limit: '10mb' }));
 
 // apply global middlewares
+app.use(globalLimiter);
 app.use(authenticateToken);
+app.use(apiLimiter);
 
 app.post('/pdf', async (request, response) => {
     await processAction('pdf', request, response);
