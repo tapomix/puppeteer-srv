@@ -12,7 +12,7 @@
     "dependencies": {
         "express": "^5.1.0",
         "express-rate-limit": "^8.1.0",
-        "puppeteer-core": "^24.17.1"
+        "puppeteer-core": "^24.26.1"
     },
     "devDependencies": {
         "nodemon": "^3.1.10"
