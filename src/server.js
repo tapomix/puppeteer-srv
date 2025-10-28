@@ -9,9 +9,9 @@ import { globalLimiter, apiLimiter } from "./middlewares/limiter.js";
 import { getBrowserInstance, gracefulShutdown, processAction } from "./services/browser.js";
 
 const app = express();
-app.use(express.json({ limit: '10mb' }));
 
 // apply global middlewares
+app.use(express.json({ limit: '2mb' }));
 app.use(globalLimiter);
 app.use(authenticateToken);
 app.use(apiLimiter);
