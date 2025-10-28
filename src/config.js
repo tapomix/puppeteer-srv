@@ -9,7 +9,7 @@ if (!process.env.SERVER_PORT) {
     console.error('[FATAL] SERVER_PORT must be set !');
     process.exit(1);
 }
-export const APP_PORT = process.env.SERVER_PORT;
+export const APP_PORT = parseInt(process.env.SERVER_PORT, 10);
 
 // APP_TOKEN must be set (+changed from default) for production
 if (
