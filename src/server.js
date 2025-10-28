@@ -10,12 +10,37 @@ import { getBrowserInstance, gracefulShutdown, processAction } from "./services/
 
 const app = express();
 
+// public routes (before auth middleware)
+app.get('/health', async (_request, response) => {
+    try {
+        const status = {
+            status: 'up',
+            browser: 'closed',
+            uptime: Math.floor(process.uptime()),
+            timestamp: new Date().toISOString(),
+        };
+
+        if (KEEP_BROWSER_OPEN) {
+            const browser = await getBrowserInstance();
+            status.browser = browser.isConnected() ? 'connected' : 'disconnected';
+        }
+
+        response.status(200).json(status);
+    } catch (error) {
+        response.status(503).json({
+            status: 'error',
+            message: error.message
+        });
+    }
+});
+
 // apply global middlewares
 app.use(express.json({ limit: '2mb' }));
 app.use(globalLimiter);
 app.use(authenticateToken);
 app.use(apiLimiter);
 
+// protected routes (after middlewares)
 app.post('/pdf', async (request, response) => {
     await processAction('pdf', request, response);
 });
