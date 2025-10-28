@@ -4,5 +4,5 @@ services:
       - ./src:/app
     # expose the port on host to test with gui tools
     ports:
-      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
+      - ${SERVER_PORT}:${SERVER_PORT}
     tty: true
