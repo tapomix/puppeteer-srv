@@ -9,6 +9,7 @@ if (!process.env.SERVER_PORT) {
     console.error('[FATAL] SERVER_PORT must be set !');
     process.exit(1);
 }
+
 export const APP_PORT = parseInt(process.env.SERVER_PORT, 10);
 
 // APP_TOKEN must be set (+changed from default) for production
@@ -19,6 +20,7 @@ if (
     console.error('[FATAL] APP_TOKEN must be set !');
     process.exit(1);
 }
+
 export const APP_TOKEN = process.env.APP_TOKEN || DEFAULT_TOKEN;
 
 export const CHROME_EXECUTABLE = process.env.CHROME_EXECUTABLE || '/usr/bin/chromium';
