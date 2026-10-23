@@ -1,6 +1,6 @@
 {
     "name": "puppeteer-srv",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Generate pdf or image based on HTML with Puppeteer",
     "license": "MIT",
     "main": "server.js",
@@ -10,11 +10,11 @@
         "start": "node server.js"
     },
     "dependencies": {
-        "express": "^5.1.0",
-        "express-rate-limit": "^8.1.0",
-        "puppeteer-core": "^24.26.1"
+        "express": "^5.3.0",
+        "express-rate-limit": "^8.7.1",
+        "puppeteer-core": "^25.16.0"
     },
     "devDependencies": {
-        "nodemon": "^3.1.10"
+        "nodemon": "^3.1.14"
     }
 }
