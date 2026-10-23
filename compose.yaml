@@ -15,6 +15,13 @@ services:
       start_period: 30s
     networks:
       - puppeteer-net
+    # sites call http://puppeteer:63001: on their own network, `puppeteer` is an alias of Traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=puppeteer" # network name, not the compose key
+      - "traefik.http.routers.puppeteer.rule=Host(`puppeteer`)"
+      - "traefik.http.routers.puppeteer.entrypoints=puppeteer" # internal entrypoint, never published on the host
+      - "traefik.http.services.puppeteer.loadbalancer.server.port=${SERVER_PORT}"
 
 networks:
   puppeteer-net:
