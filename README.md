@@ -42,7 +42,7 @@ Start the container with :
 castor start # ( or the first time : castor build && castor start )
 ```
 
-Add in the container of your *client* project the network `puppeteer-net`.
+Add in the container of your *client* project the network `puppeteer`.
 
 ```yaml
 # compose.yaml / compose.override.yaml
@@ -55,6 +55,7 @@ services:
 networks:
   puppeteer-net:
     external: true
+    name: puppeteer
 ```
 
 Then you can call the server with the address : `http://puppeteer:3000`

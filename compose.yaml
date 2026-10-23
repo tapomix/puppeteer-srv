@@ -1,10 +1,10 @@
 services:
   puppeteer:
-    container_name: puppeteer-srv
-    image: tapomix/puppeteer-srv
     build:
       context: .
       dockerfile: .docker/Dockerfile
+    container_name: puppeteer-srv
+    image: tapomix/puppeteer-srv
     env_file:
       - .env
     healthcheck:
@@ -18,4 +18,4 @@ services:
 
 networks:
   puppeteer-net:
-    name: puppeteer-net
+    name: puppeteer
