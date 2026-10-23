@@ -29,4 +29,4 @@ export const KEEP_BROWSER_OPEN = process.env.KEEP_BROWSER_OPEN === 'true'; // st
 export const RATE_LIMIT_GLOBAL_WINDOW = parseInt(process.env.RATE_LIMIT_GLOBAL_WINDOW || '2', 10);
 export const RATE_LIMIT_GLOBAL_MAX = parseInt(process.env.RATE_LIMIT_GLOBAL_MAX || '5', 10);
 export const RATE_LIMIT_API_WINDOW = parseInt(process.env.RATE_LIMIT_API_WINDOW || '1', 10);
-export const RATE_LIMIT_API_MAX = parseInt(process.env.RATE_LIMIT_API_MAX || '3', 10);
+export const RATE_LIMIT_API_MAX = parseInt(process.env.RATE_LIMIT_API_MAX || '10', 10);
