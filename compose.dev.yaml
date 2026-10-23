@@ -4,7 +4,7 @@ services:
       target: dev
     volumes:
       - ./src:/app
-    # expose the port on host to test with gui tools
+    # expose the port on the host loopback only, to test with gui tools
     ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
+      - 127.0.0.1:${SERVER_PORT}:${SERVER_PORT}
     tty: true
