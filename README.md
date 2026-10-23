@@ -42,22 +42,29 @@ Start the container with :
 castor start # ( or the first time : castor build && castor start )
 ```
 
-Add in the container of your *client* project the network `puppeteer`.
+Client projects reach the server **through Traefik**, never by joining its network :
+
+- Traefik joins the `puppeteer` network and serves the service on an internal entrypoint named `puppeteer` (see the
+  labels in `compose.yaml`), never published on the host
+- Traefik carries the `puppeteer` alias on each site network
 
 ```yaml
-# compose.yaml / compose.override.yaml
-services:
-  my-service:
-    // ...
-    networks:
-      - puppeteer-net
-
-networks:
-  puppeteer-net:
-    external: true
-    name: puppeteer
+# traefik.yaml
+entryPoints:
+    puppeteer:
+        address: :63001
 ```
 
-Then you can call the server with the address : `http://puppeteer:3000`
+Then a client project calls the server with the address : `http://puppeteer:63001`, without any extra network.
+
+## Security
+
+The HTML comes from the client projects and is rendered as untrusted content :
+
+- JavaScript is disabled : templates must be static HTML + CSS (charts, QR codes, ... as images or inline SVG)
+- only `https:` and inline (`data:`, `blob:`) resources are loaded : internal services (sites behind Traefik,
+  Traefik's internal entrypoints, cloud metadata) only speak plain `http`, and an internal `https` endpoint fails
+  certificate validation
+- every blocked request is logged with the `[BLOCKED]` prefix
 
 > See [https://github.com/tapomix/chrome-wrapper](https://github.com/tapomix/chrome-wrapper), it's the **PHP client** to dialog with this server.
