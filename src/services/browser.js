@@ -29,6 +29,21 @@ const createBrowser = async () => {
     });
 };
 
+// Let only https and inline resources out: internal services (sites behind traefik, traefik's internal entrypoints,
+// cloud metadata) speak plain http, and an internal https endpoint fails certificate validation
+const filterRequest = (interceptedRequest) => {
+    const { protocol } = new URL(interceptedRequest.url());
+
+    if (!['https:', 'data:', 'blob:', 'about:'].includes(protocol)) {
+        console.log('[BLOCKED] ' + interceptedRequest.url());
+        interceptedRequest.abort('blockedbyclient');
+
+        return;
+    }
+
+    interceptedRequest.continue();
+};
+
 const gracefulShutdown = async (reason = 'manual') => {
     console.log(`[JS] Graceful shutdown triggered (${reason})...`);
 
@@ -57,6 +72,11 @@ const processAction = async (action, request, response) => {
     try {
         browser = await getBrowserInstance();
         page = await browser.newPage();
+
+        // html comes from the calling sites: run none of its scripts, filter what it loads
+        await page.setJavaScriptEnabled(false);
+        await page.setRequestInterception(true);
+        page.on('request', filterRequest);
 
         await page.setViewport(viewport || { width: 1920, height: 0 });
 
