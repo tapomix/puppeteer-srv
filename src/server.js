@@ -10,6 +10,9 @@ import { getBrowserInstance, gracefulShutdown, processAction } from "./services/
 
 const app = express();
 
+// requests arrive through Traefik: rate-limit the calling site, not Traefik's single IP
+app.set('trust proxy', 1);
+
 // public routes (before auth middleware)
 app.get('/health', async (_request, response) => {
     try {
