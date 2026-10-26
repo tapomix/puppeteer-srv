@@ -14,6 +14,9 @@ RUN apk add --no-cache \
     # add curl to run healthcheck
     curl
 
+# upgrade the npm shipped with the node image
+RUN npm install -g npm@12.2.1
+
 WORKDIR /app
 
 RUN chown -R node:node .
@@ -34,7 +37,7 @@ FROM base AS prod
 
 COPY --chown=node:node --link src/package*.json ./
 
-RUN npm install --production
+RUN npm install --omit=dev
 
 COPY --chown=node:node --link src .
 
