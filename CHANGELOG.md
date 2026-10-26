@@ -5,7 +5,9 @@
 - bump puppeteer-core to 25.16.0
 - bump express to 5.3.0 + express-rate-limit to 8.7.1 + nodemon to 3.1.14
 - fix npm audit vulnerabilities
-- bump npm to 12.2.1 in the docker image
+- bump node to 26 + npm to 12.2.1 in the docker image
+- slim the prod image: plain alpine + node binary, without npm (-70MB)
+- fix the server not exiting on SIGINT/SIGTERM (killed after 10s)
 - rename docker network puppeteer-net to puppeteer
 - expose the service to traefik on an internal puppeteer entrypoint
 - trust one proxy hop to rate-limit callers behind traefik
