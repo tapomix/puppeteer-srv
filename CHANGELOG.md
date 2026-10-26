@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 0.3.0 @ 2026-10-23
+
+- bump puppeteer-core to 25.16.0
+- bump express to 5.3.0 + express-rate-limit to 8.7.1 + nodemon to 3.1.14
+- fix npm audit vulnerabilities
+- rename docker network puppeteer-net to puppeteer
+- expose the service to traefik on an internal puppeteer entrypoint
+- trust one proxy hop to rate-limit callers behind traefik
+- raise default api rate limit to 10 req/min
+- bind the dev port to the host loopback only
+- disable javascript and block non-https requests in rendered html
+- fix castor 1.8 deprecation (define CASTOR_USE_CHDIR)
+
 ## 0.2.0 @ 2025-10-28
 
 - bump puppeteer version to 24.26.1
