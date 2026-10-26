@@ -58,7 +58,7 @@ app.use((_request, response) => {
 });
 
 // finally start server after middlewares registration + routes definition
-app.listen(APP_PORT, () => {
+const server = app.listen(APP_PORT, () => {
     console.log(`[SRV] Puppeteer service running on ${APP_PORT} # ${APP_ENV}`);
     console.log('[SRV] Browser kept ? ' + (KEEP_BROWSER_OPEN ? 'V' : 'X'));
 
@@ -74,7 +74,7 @@ app.listen(APP_PORT, () => {
 ['SIGINT', 'SIGTERM'].forEach(signal => {
     process.on(signal, async () => {
         await gracefulShutdown(signal);
-        // just set exitCode instead of exit(0) to give time to finish closing process
-        process.exitCode = 0;
+        // stop accepting connections: the process exits once pending requests are done
+        server.close();
     });
 });
