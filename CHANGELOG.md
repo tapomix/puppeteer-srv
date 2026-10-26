@@ -5,6 +5,7 @@
 - bump puppeteer-core to 25.16.0
 - bump express to 5.3.0 + express-rate-limit to 8.7.1 + nodemon to 3.1.14
 - fix npm audit vulnerabilities
+- bump npm to 12.2.1 in the docker image
 - rename docker network puppeteer-net to puppeteer
 - expose the service to traefik on an internal puppeteer entrypoint
 - trust one proxy hop to rate-limit callers behind traefik
