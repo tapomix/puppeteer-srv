@@ -66,9 +66,10 @@ COPY --from=node --link /usr/local/bin/node /usr/local/bin/node
 
 WORKDIR /app
 
-COPY --from=deps --chown=node:node --link /app/node_modules ./node_modules
+# numeric uid:gid (= node user): names can't be resolved with --link
+COPY --from=deps --chown=1000:1000 --link /app/node_modules ./node_modules
 
-COPY --chown=node:node --link src .
+COPY --chown=1000:1000 --link src .
 
 USER node
 
