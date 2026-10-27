@@ -15,7 +15,7 @@ services:
       start_period: 30s
     networks:
       - puppeteer-net
-    # sites call http://puppeteer:63001: on their own network, `puppeteer` is an alias of Traefik
+    # sites call http://puppeteer:3001 (Traefik entrypoint): on their own network, `puppeteer` is an alias of Traefik
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=puppeteer" # network name, not the compose key

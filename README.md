@@ -2,7 +2,7 @@
 
 [Puppeteer](https://pptr.dev/) JS server to generate **pdf** or **screenshot** from html code.
 
-The server will be exposed on : `http://puppeteer:3000` (port is configurable)
+Sites call the server on : `http://puppeteer:3001` (through Traefik, see [Usage](#usage))
 
 ## Installation
 
@@ -49,13 +49,20 @@ Client projects reach the server **through Traefik**, never by joining its netwo
 - Traefik carries the `puppeteer` alias on each site network
 
 ```yaml
-# traefik.yaml
+# traefik.{dev,prod}.yaml
 entryPoints:
     puppeteer:
-        address: :63001
+        address: :3001
 ```
 
-Then a client project calls the server with the address : `http://puppeteer:63001`, without any extra network.
+Then a client project calls the server with the address : `http://puppeteer:3001`, without any extra network.
+
+Each port has a single role, the same in dev and prod :
+
+| Port | Role | Used by |
+|------|------|---------|
+| `3001` | Traefik `puppeteer` entrypoint | the sites |
+| `3000` | `SERVER_PORT`, node inside the container | Traefik (labels), the healthcheck, and in dev only you (Bruno, curl) on the host loopback : `http://localhost:3000` |
 
 ## Security
 

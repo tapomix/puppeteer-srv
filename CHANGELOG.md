@@ -3,6 +3,7 @@
 ## Unreleased
 
 - fix /health returning 503 with KEEP_BROWSER_OPEN=true (`isConnected()` removed in puppeteer 25)
+- one port per role: sites call the traefik entrypoint on 3001 (dev + prod), the server listens on SERVER_PORT=3000
 
 ## 0.3.0 @ 2026-10-23
 
