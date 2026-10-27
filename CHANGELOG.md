@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- fix /health returning 503 with KEEP_BROWSER_OPEN=true (`isConnected()` removed in puppeteer 25)
+
 ## 0.3.0 @ 2026-10-23
 
 - bump puppeteer-core to 25.16.0
