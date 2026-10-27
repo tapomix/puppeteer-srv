@@ -25,7 +25,7 @@ app.get('/health', async (_request, response) => {
 
         if (KEEP_BROWSER_OPEN) {
             const browser = await getBrowserInstance();
-            status.browser = browser.isConnected() ? 'connected' : 'disconnected';
+            status.browser = browser.connected ? 'connected' : 'disconnected';
         }
 
         response.status(200).json(status);
