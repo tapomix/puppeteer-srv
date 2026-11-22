@@ -6,7 +6,3 @@ services:
     expose:
       - ${SERVER_PORT}
     restart: unless-stopped
-    deploy:
-      restart_policy:
-        condition: on-failure
-        max_attempts: 2
