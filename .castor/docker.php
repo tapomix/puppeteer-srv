@@ -42,7 +42,7 @@ function logs(): void
 {
     io()->title('Showing server logs');
 
-    castor_run(\array_merge(buildBaseDockerComposeCmd(), ['logs', '-f']));
+    castor_run(\array_merge(buildBaseDockerComposeCmd(), ['logs', '-f', '-t']));
 }
 
 #[AsTask(description: 'Open terminal in container', aliases: ['sh'])]
