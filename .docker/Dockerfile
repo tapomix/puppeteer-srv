@@ -28,7 +28,7 @@ ARG SYSTEM_PACKAGES
 RUN apk add --no-cache ${SYSTEM_PACKAGES}
 
 # upgrade the npm shipped with the node image
-RUN npm install -g npm@12.2.1
+RUN npm install -g npm@12.2.3
 
 WORKDIR /app
 

@@ -6,6 +6,8 @@
 - one port per role: sites call the traefik entrypoint on 3001 (dev + prod), the server listens on SERVER_PORT=3000
 - show the timestamps in castor logs
 - fix the prod container not restarting after a host reboot (`deploy.restart_policy` on-failure overrode `restart: unless-stopped`)
+- bump puppeteer-core to 25.18.1 + express-rate-limit to 8.7.5
+- bump npm to 12.2.3 in the docker image
 
 ## 0.3.0 @ 2026-10-23
 
